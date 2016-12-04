@@ -1,42 +1,113 @@
-# npm-base
+# ddp-rate-limiter-mixin
 
-Boilerplate for creating npm packages with ES2015. Written with Meteor developers in mind but great for anyone. Based on Arunoda's original npm-base boilerplate, this was initially forked to add the babel watch command and use the AirBnB style guide for linting.  
+A mixin for [mdg:validated-method](https://github.com/meteor/validated-method) to add rate limitation support to Meteor's methods.
 
----
+## Install
 
-Writing in ES2015 is an amazing experience. Setting up babel and the development environment in a kind of a pain.
+```bash
+meteor add ddp-rate-limiter
+npm install --save ddp-rate-limiter-mixin
+```
 
-If you want to write a **npm module** in ES2015 and publish to npm with backward compatibility, this is the **easiest** way.
+## Usage
 
-## Basic Usage
+```javascript
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
+import { RateLimiterMixin } from 'ddp-rate-limiter-mixin';
 
-* Simply clone [this](https://github.com/kadirahq/npm-base) project.
-* Change the `package.json` as you want.
-* `lib/index.js` in your entry point.
-* `npm start` will initiate the babel watch command and automatically transpile your code on save.
-* Then publish to npm via `npm publish`.
+// limit the maximum 5 requests in 5 seconds to this method for every clients
+const foo = new ValidatedMethod({
+  name: 'foo',
+  mixins: [RateLimiterMixin],
+  rateLimit: {
+    numRequests: 5,
+    timeInterval: 5000,
+  },
+  validate: null,
+  run() {
+    // ...
+  }
+});
 
-## Linting
+// limit the maximum 5 requests in 5 seconds to this method for user1 only
+const boo = new ValidatedMethod({
+  name: 'boo',
+  mixins: [RateLimiterMixin],
+  rateLimit: {
+    matcher: {
+      userId: 'user1',
+    },
+    numRequests: 5,
+    timeInterval: 5000,
+  },
+  validate: null,
+  run() {
+    // ...
+  }
+});
 
-* ESLINT support is added to the project.
-* It's configured for ES2015 and inherited configurations from [graphql/graphql-js](https://github.com/graphql/graphql-js).
-* Use `npm run lint` to lint your code and `npm run lintfix` to fix common issues.
+// limit the maximum 5 requests in 5 seconds to this method for users who are not `Admin`
+const bar = new ValidatedMethod({
+  name: 'bar',
+  mixins: [RateLimiterMixin],
+  rateLimit: {
+    // this use to match the request, optional
+    matcher: {
+      // optional, could be a string or a return-boolean function
+      userId(userId) {
+        return Meteor.users.findOne(userId).type !== 'Admin';
+      },
+      // optional, could be a string or a return-boolean function
+      connectionId(connectionId) {
+        return true;
+      },
+      // optional, could be a string or a return-boolean function
+      clientAddress(clientAddress) {
+        return true;
+      },
+    },
+    numRequests: 5,
+    timeInterval: 5000,
+  },
+  validate: null,
+  run() {
+    // ...
+  }
+});
+```
 
-## Testing
+## Rate Limit
 
-* You can write test under `__test__` directory anywhere inside `lib` including sub-directories.
-* Then run `npm test` to test your code. (It'll lint your code as well).
-* You can also run `npm run testonly` to run tests without linting.
+This package uses Meteor's [DDPRateLimiter](https://docs.meteor.com/api/methods.html#ddpratelimiter) behind the scene to support rate limitation for Meteor methods. This comes with a nicer way to define rate limitation.
 
-## ES2015 Setup
+Using normal [DDPRateLimiter](https://docs.meteor.com/api/methods.html#ddpratelimiter) way is fine, but it would introduce 'side-effect' to your system. Like sometimes you just do not know where the limitation is set, or what is the maximum requests could be called in a period of time. This package helps solving that by specifying limitation when defining a method.
 
-* ES2015 support is added with babel6.
-* After you publish your project to npm, it can be run on older node versions and browsers without the support of Babel.
-* This project uses ES2015 and some of the upcoming features like `async await`.
-* You can change them with adding and removing [presets](http://jamesknelson.com/the-six-things-you-need-to-know-about-babel-6/).
-* All the polyfills you use are taken from the local `babel-runtime` package. So, this package won't add any global polyfills and pollute the global namespace.
+## rateLimit option
 
-## Kudos
+You have to specify the `rateLimit` option to define limitation.
 
-* Babel6 and the team behind it.
-* AirBnB style guide
+`rateLimit.matcher` is optional. If specified it is similar to `matcher` 1st argument of [DDPRateLimiter.addRule](https://docs.meteor.com/api/methods.html#DDPRateLimiter-addRule), except `name` is always the name of method and `type` is always `method`.
+
+```javascript
+rateLimit: {
+  // this use to match the request, optional
+  matcher: {
+    // optional, could be a string or a return-boolean function
+    userId(userId) {
+      // ...
+      return true/false;
+    },
+    // optional, could be a string or a return-boolean function
+    connectionId(connectionId) {
+      return true/false;
+    },
+    // optional, could be a string or a return-boolean function
+    clientAddress(clientAddress) {
+      return true/false;
+    },
+  },
+  // numRequests is the maximum number of  requests could be made in timeInterval (milliseconds)
+  numRequests: 5,
+  timeInterval: 5000, // 5000 milliseconds
+},
+```

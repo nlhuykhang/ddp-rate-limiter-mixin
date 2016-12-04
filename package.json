@@ -1,10 +1,10 @@
 {
-  "name": "npm-base",
+  "name": "ddp-rate-limiter-mixin",
   "version": "1.0.0",
-  "description": "A base NPM package for writing a NPM package in ES2015",
+  "description": "A mixin for [mdg:validated-method](https://github.com/meteor/validated-method) to add rate limitation support to Meteor's methods.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kadirahq/npm-base.git"
+    "url": "TBD"
   },
   "license": "MIT",
   "options": {
@@ -19,22 +19,26 @@
     "test-watch": "npm run testonly -- --watch --watch-extensions js",
     "start": "babel src -d dist --watch"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "devDependencies": {
     "babel-cli": "6.x.x",
     "babel-core": "6.x.x",
-    "babel-eslint": "4.x.x",
+    "babel-eslint": "^7.1.1",
     "babel-plugin-transform-runtime": "6.x.x",
     "babel-polyfill": "6.x.x",
     "babel-preset-es2015": "6.x.x",
     "babel-preset-stage-2": "6.x.x",
     "chai": "3.x.x",
-    "eslint": "^1.7.3",
-    "eslint-config-airbnb": "^9.0.1",
-    "eslint-import-resolver-meteor": "^0.2.4",
-    "eslint-plugin-babel": "2.x.x",
-    "eslint-plugin-import": "^1.10.3",
-    "eslint-plugin-jsx-a11y": "^2.0.1",
-    "eslint-plugin-react": "^5.2.2",
+    "eslint": "^3.11.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-import-resolver-meteor": "^0.3.4",
+    "eslint-plugin-babel": "^4.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.7.1",
     "mocha": "2.x.x",
     "nodemon": "1.7.x"
   },
