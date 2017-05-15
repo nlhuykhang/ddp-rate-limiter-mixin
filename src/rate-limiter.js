@@ -6,6 +6,8 @@ const isOptionalStringOrFunction =
 
 const isOptionalObject = val => typeof val === 'object' || typeof val === 'undefined';
 
+const isOptionalFunction = val => typeof val === 'function' || typeof val === 'undefined';
+
 const alwaysTrue = () => true;
 
 const RateLimiterMixin = (methodOptions) => {
@@ -22,6 +24,7 @@ const RateLimiterMixin = (methodOptions) => {
     matcher,
     numRequests,
     timeInterval,
+    callback,
   } = rateLimit;
 
   if (typeof numRequests !== 'number') {
@@ -34,6 +37,10 @@ const RateLimiterMixin = (methodOptions) => {
 
   if (!isOptionalObject(matcher)) {
     throw new Error(`RateLimiterMixin: matcher must be an object if specified (${name} method)`);
+  }
+
+  if (!isOptionalFunction(callback)) {
+    throw new Error(`RateLimiterMixin: callback must be a function if specified (${name} method)`);
   }
 
   const {
@@ -60,7 +67,7 @@ const RateLimiterMixin = (methodOptions) => {
     userId,
     connectionId,
     clientAddress,
-  }, numRequests, timeInterval);
+  }, numRequests, timeInterval, callback);
 
   return methodOptions;
 };
