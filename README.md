@@ -109,5 +109,32 @@ rateLimit: {
   // numRequests is the maximum number of  requests could be made in timeInterval (milliseconds)
   numRequests: 5,
   timeInterval: 5000, // 5000 milliseconds
+  // callback is a function to be called after a rule is executed.
+  callback: (check, ruleInput) => ()
 },
 ```
+
+### rateLimit callback properties
+
+Overview:
+
+```
+check: {
+  allowed: boolean - indicates wether the call is allowed or not
+  timeToReset: integer - milliseconds to reset the number for the current interval
+  numInvocationsLeft: integer - number of invocations left for the current interval
+}
+
+ruleInput: {
+  'type': string - either 'method' or 'subscription'
+  'name': string - the name of the method or subscription being called
+  'userId': string - the user ID attempting the method or subscription
+  'connectionId': string - a string representing the user's DDP connection
+  'clientAddress': string - the IP address of the user
+}
+```
+
+For more info check the following links:
+
+- [Meteor Docs - DDPRateLimiter-addRule](https://docs.meteor.com/api/methods.html#DDPRateLimiter-addRule)
+- [Meteor DDPRateLimiter-addRule callback PR](https://github.com/meteor/meteor/pull/8237)
