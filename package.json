@@ -1,6 +1,6 @@
 {
   "name": "ddp-rate-limiter-mixin",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "A mixin for https://github.com/meteor/validated-method to add rate limitation support to Meteor's methods.",
   "repository": {
     "type": "git",
