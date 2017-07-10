@@ -176,9 +176,9 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
 
-ddp-rate-limiter-mixin@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/ddp-rate-limiter-mixin/-/ddp-rate-limiter-mixin-1.1.6.tgz#83c0e20b7484011bcc283787f52b101c33e45c37"
+ddp-rate-limiter-mixin@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/ddp-rate-limiter-mixin/-/ddp-rate-limiter-mixin-1.1.8.tgz#1eb2477af97be60b8f9e0811724eab217ed96eb7"
   dependencies:
     babel-runtime "6.x.x"
 
