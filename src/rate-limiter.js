@@ -12,7 +12,7 @@ const alwaysTrue = () => true;
 
 const RateLimiterMixin = (methodOptions) => {
   if (Meteor.isClient) {
-    return;
+    return methodOptions;
   }
 
   const {
@@ -72,6 +72,8 @@ const RateLimiterMixin = (methodOptions) => {
     connectionId,
     clientAddress,
   }, numRequests, timeInterval, callback);
+
+  return methodOptions;
 };
 
 export { RateLimiterMixin };
