@@ -1,4 +1,4 @@
-/* global DDPRateLimiter */
+/* global DDPRateLimiter, Meteor */
 /* eslint import/prefer-default-export: 0 */
 
 const isOptionalStringOrFunction =
@@ -11,6 +11,10 @@ const isOptionalFunction = val => typeof val === 'function' || typeof val === 'u
 const alwaysTrue = () => true;
 
 const RateLimiterMixin = (methodOptions) => {
+  if (Meteor.isClient) {
+    return;
+  }
+
   const {
     name,
     rateLimit,
@@ -68,8 +72,6 @@ const RateLimiterMixin = (methodOptions) => {
     connectionId,
     clientAddress,
   }, numRequests, timeInterval, callback);
-
-  return methodOptions;
 };
 
 export { RateLimiterMixin };
